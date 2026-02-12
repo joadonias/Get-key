@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Key</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: rgba(0,0,0,0.4);
+      padding: 30px;
+      border-radius: 15px;
+      width: 320px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #00c6ff;
+      color: #000;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:disabled {
+      background: #555;
+      cursor: not-allowed;
+      color: #ccc;
+    }
+    .key-box {
+      margin-top: 20px;
+      background: #111;
+      padding: 15px;
+      border-radius: 10px;
+      word-break: break-all;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>  <!-- ETAPA 1 -->  <div class="box" id="step1">
+    <h1>Etapa 1</h1>
+    <button id="btn1">Pegar Key (10s)</button>
+  </div>  <!-- ETAPA 2 -->  <div class="box hidden" id="step2">
+    <h1>Etapa 2</h1>
+    <button id="btn2">Pegar Key (5s)</button>
+  </div>  <!-- RESULTADO FINAL -->  <div class="box hidden" id="final">
+    <h1>Sua Key</h1>
+    <div class="key-box" id="key">batatinho2026</div>
+    <br>
+    <button onclick="copyKey()">Copiar Key</button>
+  </div>  <script>
+    const btn1 = document.getElementById('btn1');
+    const btn2 = document.getElementById('btn2');
+
+    btn1.addEventListener('click', () => {
+      let time = 10;
+      btn1.disabled = true;
+      const interval = setInterval(() => {
+        btn1.textContent = `Aguarde ${time}s`;
+        time--;
+        if (time < 0) {
+          clearInterval(interval);
+          document.getElementById('step1').classList.add('hidden');
+          document.getElementById('step2').classList.remove('hidden');
+        }
+      }, 1000);
+    });
+
+    btn2.addEventListener('click', () => {
+      let time = 5;
+      btn2.disabled = true;
+      const interval = setInterval(() => {
+        btn2.textContent = `Aguarde ${time}s`;
+        time--;
+        if (time < 0) {
+          clearInterval(interval);
+          document.getElementById('step2').classList.add('hidden');
+          document.getElementById('final').classList.remove('hidden');
+        }
+      }, 1000);
+    });
+
+    function copyKey() {
+      const keyText = document.getElementById('key').innerText;
+      navigator.clipboard.writeText(keyText);
+      alert('Key copiada!');
+    }
+  </script></body>
+</html>
