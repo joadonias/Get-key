@@ -6,7 +6,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      background: linear-gradient(135deg, #141e30, #243b55);
       color: #fff;
       display: flex;
       justify-content: center;
@@ -14,12 +14,12 @@
       height: 100vh;
     }
     .box {
-      background: rgba(0,0,0,0.4);
+      background: rgba(0,0,0,0.5);
       padding: 30px;
       border-radius: 15px;
-      width: 320px;
+      width: 340px;
       text-align: center;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
     }
     h1 {
       margin-bottom: 20px;
@@ -28,11 +28,14 @@
       padding: 12px 20px;
       border: none;
       border-radius: 10px;
-      background: #00c6ff;
+      background: #00f2fe;
       color: #000;
       font-size: 16px;
       cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
     }
+    button:hover { transform: scale(1.05); }
     button:disabled {
       background: #555;
       cursor: not-allowed;
@@ -43,6 +46,8 @@
       background: #111;
       padding: 15px;
       border-radius: 10px;
+      font-size: 18px;
+      letter-spacing: 2px;
       word-break: break-all;
     }
     .hidden { display: none; }
@@ -50,18 +55,34 @@
 </head>
 <body>  <!-- ETAPA 1 -->  <div class="box" id="step1">
     <h1>Etapa 1</h1>
-    <button id="btn1">Pegar Key (10s)</button>
+    <button id="btn1">Pegar Key</button>
   </div>  <!-- ETAPA 2 -->  <div class="box hidden" id="step2">
     <h1>Etapa 2</h1>
-    <button id="btn2">Pegar Key (5s)</button>
+    <button id="btn2">Pegar Key</button>
   </div>  <!-- RESULTADO FINAL -->  <div class="box hidden" id="final">
-    <h1>Sua Key</h1>
-    <div class="key-box" id="key">batatinho2026</div>
+    <h1>Sua Key Gerada</h1>
+    <div class="key-box" id="key"></div>
     <br>
     <button onclick="copyKey()">Copiar Key</button>
   </div>  <script>
     const btn1 = document.getElementById('btn1');
     const btn2 = document.getElementById('btn2');
+    const keyDisplay = document.getElementById('key');
+
+    // Pega keys já usadas (salvas no navegador)
+    let usedKeys = JSON.parse(localStorage.getItem("usedKeys")) || [];
+
+    function generateUniqueKey() {
+      let newKey;
+      do {
+        let numbers = Math.floor(1000000 + Math.random() * 9000000); // 7 números
+        newKey = "keyb" + numbers; // total 11 caracteres
+      } while (usedKeys.includes(newKey));
+
+      usedKeys.push(newKey);
+      localStorage.setItem("usedKeys", JSON.stringify(usedKeys));
+      return newKey;
+    }
 
     btn1.addEventListener('click', () => {
       let time = 10;
@@ -85,6 +106,10 @@
         time--;
         if (time < 0) {
           clearInterval(interval);
+
+          const generatedKey = generateUniqueKey();
+          keyDisplay.textContent = generatedKey;
+
           document.getElementById('step2').classList.add('hidden');
           document.getElementById('final').classList.remove('hidden');
         }
@@ -92,9 +117,9 @@
     });
 
     function copyKey() {
-      const keyText = document.getElementById('key').innerText;
+      const keyText = keyDisplay.innerText;
       navigator.clipboard.writeText(keyText);
-      alert('Key copiada!');
+      alert('Key copiada com sucesso!');
     }
   </script></body>
 </html>
